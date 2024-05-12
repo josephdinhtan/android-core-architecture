@@ -16,3 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidCoreArchitecture"
 include(":app")
+include(":database")
+include(":data")
+include(":model")
+include(":ui")
