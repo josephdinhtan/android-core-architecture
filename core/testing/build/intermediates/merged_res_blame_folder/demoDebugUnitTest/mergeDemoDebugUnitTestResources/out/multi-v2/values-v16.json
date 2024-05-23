@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.jddev.corearch.core.testing.test.testing-mergeDemoDebugUnitTestResources-43:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\jhd468\\.gradle\\caches\\transforms-4\\63bd5141124d7401ba0d82511420c196\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
+                    }
+                }
+            ]
+        }
+    ]
+}

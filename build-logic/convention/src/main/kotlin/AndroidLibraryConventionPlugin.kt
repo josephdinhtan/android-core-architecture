@@ -1,7 +1,11 @@
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
-import com.jddev.configureKotlinAndroid
-import com.jddev.libs
+import com.jddev.corearch.configureFlavors
+import com.jddev.corearch.configureGradleManagedDevices
+import com.jddev.corearch.configureKotlinAndroid
+import com.jddev.corearch.configurePrintApksTask
+import com.jddev.corearch.disableUnnecessaryAndroidTests
+import com.jddev.corearch.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -14,28 +18,29 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("jddev.android.lint")
             }
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
-                // configureFlavors(this)
-                // configureGradleManagedDevices(this)
+                testOptions.animationsDisabled = true
+                configureFlavors(this)
+                configureGradleManagedDevices(this)
+                // The resource prefix is derived from the module name,
+                // so resources inside ":core:module1" must be prefixed with "core_module1_"
+                resourcePrefix =
+                    path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_")
+                        .lowercase() + "_"
             }
             extensions.configure<LibraryAndroidComponentsExtension> {
-                // configurePrintApksTask(this)
-                // disableUnnecessaryAndroidTests(target)
-            }
-            configurations.configureEach {
-                resolutionStrategy {
-                    force(libs.findLibrary("test.junit").get())
-                    // Temporary workaround for https://issuetracker.google.com/174733673
-                    force("org.objenesis:objenesis:2.6")
-                }
+                configurePrintApksTask(this)
+                disableUnnecessaryAndroidTests(target)
             }
             dependencies {
-                add("androidTestImplementation", kotlin("test"))
                 add("testImplementation", kotlin("test"))
+
+                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
         }
     }
